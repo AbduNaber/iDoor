@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+    <title>iDoor</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light fixed-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🚪iDoor</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#control">Controls</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#intro">Introduction</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#devs">Developers</a>
+            </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        function update(){
+            $.get("/update", function(data){
+                $("#hour").html(data[0])
+                $("#date").html(data[1])
+                $("#username").html(data[2])
+                if (data[3] == "1"){
+                    $("#bt").addClass("doorOpen")
+                    $("#bt").val("opened")
+                }
+                else {
+                    $("#bt").removeClass("doorOpen")
+                    $("#bt").val("closed")
+                }
+            });
+        }
+        update()
+        var intervalId = setInterval(function() {
+            update()
+        }, 1000);
+    </script>
+    <div class="container my-5" id="control">
+        <h1 class="text-center">Door Controls</h1>
+        {% if state == "1" %}
+        <form id="datata-form" class="backDoor justify-content-center" method="POST" action="">
+            <input
+                type="submit"
+                name="bt"
+                id="bt"
+                class="door doorOpen"
+                value="opened"
+                onclick=""
+            />
+        </form>
+        {% else %}
+        <form id="datata-form" class="backDoor" method="POST" action="">
+            <input
+                type="submit"
+                name="bt"
+                id="bt"
+                class="door"
+                value="closed"
+                onclick=""
+            />
+        </form>
+        {% endif %}
+        <script>
+        function toggleDoor() {
+                document.getElementById("bt").classList.toggle("doorOpen");
+            if (document.getElementById("bt").className == "door") {
+                document.getElementById("bt").value = "closed";
+            }
+            else {
+                document.getElementById("bt").value = "opened";
+            }
+        }
+        </script>
+        <div class="container-sm">
+            <div class="alert alert-warning mt-5 alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">⚠️ Last Login Informations</h4>
+                <p><strong>Last Login Time:</strong> <i id="date"></i>, <i id="hour"></i> <i>UTC</i></p>
+                <hr>
+                <p class="mb-0"><strong>User Name:</strong> <i id="username"></i></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        <hr class="my-5">
+    </div>
+    <body>
+        <div class="container my-5" id="intro">
+            <h1 class="my-4">Introduction</h1>
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Introduction
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    An Arduino project that allows you to open a door using a website or RFID card is a great way to add a level of convenience and security to your home or office. The project would involve using an Arduino board, an RFID reader, and a servo motor to control the door lock. The Arduino would be programmed to listen for a specific RFID card to be scanned or for a specific command to be sent from a website. When the correct RFID card is scanned or the correct command is received, the servo motor would rotate to unlock the door. The website could be accessed from any device connected to the internet, allowing you to remotely unlock the door for guests or employees. Additionally, you can also set up a log system to keep track of the time and date of when the door was opened, who opened it and also you can set up a password protection for the website to increase security. This project is a perfect example of how Arduino can be used to create smart and secure systems that improve daily life.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    RFID Setup
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Setting up an RFID system for the door opening project is relatively straightforward. The first step would be to connect the RFID reader to the Arduino board using the appropriate cables. Next, you would need to install a library for the RFID reader in the Arduino IDE, this library will allow you to communicate with the RFID reader and read the unique ID of an RFID card or tag.
+                    Once the RFID reader is connected and configured, you can then write the code to scan for an RFID card and compare its unique ID to a pre-programmed list of authorized IDs. If a match is found, the servo motor would be activated to unlock the door. 
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Servo Motor Setup
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    To set up a servo motor for the door opening project using an Arduino board, connect the servo motor to the board using the power, ground and signal wires. Next, install a library in the Arduino IDE that allows controlling the servo motor and write the code to control the lock mechanism of the door. For example, when the correct RFID card is scanned or the correct command is received from the website, the servo motor would rotate to unlock the door. It is important to note that servo motors have a limited range of motion and can wear out over time, so use a power supply that can provide enough power and set up a limit switch on the door mechanism to prevent damage.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Website and Arduino Connection
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    The Thingspeak platform can be used to remotely monitor and control the door opening project by creating a channel to store data sent from the Arduino board, such as the status of the door and the time of the last access. Additionally, a website can be created using HTML, CSS, and JavaScript to display the data stored on the Thingspeak channel, and to send commands to the Arduino board to control the door. The website can be hosted on a web server or a hosting service, allowing for remote access from anywhere. Keep in mind that an internet connection is required for sending data to Thingspeak and accessing the website, also make sure to keep the Thingspeak API key secure.
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-5">
+</div>
+<div class="container my-5" id="devs">
+    <h1>Developers</h1>
+    <div class="row justify-content-start">
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Umut Satir</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Website Developers</h6>
+                <p class="card-text">I worked on the website and made the connection between the website and Arduino.</p>
+                <a href="https://www.github.com/umutsatir" class="card-link">Github Link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Muhammed Emir Kara</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Website Developers</h6>
+                <p class="card-text">I worked on the website and did the door animation.</p>
+                <a href="https://www.github.com/emirgit" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Abdullah Turkmen</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Arduino Developers</h6>
+                <p class="card-text">I created the Thingspeak account and connected it to the Arduino.</p>
+                <a href="https://www.github.com/abdunaber" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Elyesa</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Arduino Developers</h6>
+                <p class="card-text">I connected modules and servo motor with Arduino.</p>
+                <a href="https://www.github.com/elyesacs" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ahmet Fettahoglu</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Arduino Developers</h6>
+                <p class="card-text">I worked on the Arduino code for RFID module and servo motor.</p>
+                <a href="https://www.github.com/Afettahoglu" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Emre Durmaz</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Arduino Developers</h6>
+                <p class="card-text">I worked on the Arduino code for RFID module and servo motor.</p>
+                <a href="https://www.github.com/undert0v" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Enis Okunakol</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <p class="card-text">I connected modules and servo motor with Arduino.</p>
+                <a href="#" class="card-link">Github link</a>
+            </div>
+        </div>
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Mehmet Meliksah Caliskan</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Arduino Developers</h6>
+                <p class="card-text">I connected modules and servo motor with Arduino.</p>
+                    <a href="https://www.github.com/Meliksahcaliskan" class="card-link">Github link</a>
+                </div>
+            </div>
+            <div class="card m-3" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Mert Ugur</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Prototype Creators</h6>
+                    <p class="card-text">I created the prototype for the door and pinned the whole system to the prototype.</p>
+                    <a href="#" class="card-link">Github link</a>
+                </div>
+            </div>
+            <div class="card m-3" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Cem Baygin</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Prototype Creators</h6>
+                    <p class="card-text">I created the prototype for the door and pinned the whole system to the prototype.</p>
+                    <a href="#" class="card-link">Github link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
